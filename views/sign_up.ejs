@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sign Up</title>
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script>
+    </head>
+    <body>
+        <script>
+            function check() {
+                if($('#name').val() == '') {
+                    alert('Username is empty!');
+                } else if($('#password').val() == '') {
+                    alert('Password is empty!');
+                } else if($('#password').val() != $('#rpassword').val()) {
+                    alert('Password not match!');
+                } else {
+                    $('form').submit();
+                }
+            }
+        </script>
+        <form action="./sign_up/action" method="post" id="form">
+            Username : <input type="text" name="name" id="name"><br>
+            Password : <input type="password" name="password" id="password"><br>
+            Repeat Password : <input type="password" id="rpassword"><br>
+            <button type="button" onclick="check()">Submit</button>
+        </form>
+    </body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sign In</title>
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script>
+    </head>
+    <body>
+        <script>
+            function check() {
+                if($('#name').val() == "") {
+                    alert("Username is empty!");
+                    return;
+                }
+                if($('#password').val() == "") {
+                    alert("Password is empty!");
+                    return;
+                } 
+                $('#form').submit();
+            }
+        </script>
+        <form action="./sign_in/action" method="post" id="form">
+            Username : <input type="text" name="name" id="name"><br>
+            Password : <input type="password" name="password" id="password"><br>
+            <button type="button" onclick="check()">submit</button>
+        </form>
+    </body>
+</html>

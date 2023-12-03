@@ -3,12 +3,11 @@ const router = express.Router();
 const db = require('./../modules/database');
 const md5 = require('md5')
 
-router.post('/login/action', (req, res) => {
-    console.log(req.body.name);
+router.post('/sign_in/action', (req, res) => {
     db.query("SELECT * FROM users WHERE name = ?", [req.body.name], (result) => {
         if(result[0] == null){
             res.render('default', {
-                title: 'Login',
+                title: 'Sign In',
                 brief: 'No Such Account',
                 content: 'Your username is not correct.'
             })
@@ -16,7 +15,7 @@ router.post('/login/action', (req, res) => {
             var mpass = md5(req.body.password);
             if(result[0].password != mpass){
                 res.render('default', {
-                    title: 'Login',
+                    title: 'Sign In',
                     brief: 'Wrong Password',
                     content: null
                 })
@@ -24,23 +23,74 @@ router.post('/login/action', (req, res) => {
                 req.session.status = 1;
                 req.session.ide = result[0].id;
                 res.render('default', {
-                    title: 'Login',
-                    brief: 'Login Success',
-                    content: '<a href="./../0">Click here</a>'
+                    title: 'Sign In',
+                    brief: 'Success',
+                    content: null
                 })
             }
         }
     })
 })
 
-router.get('/login', (req, res) => {
+router.get('/sign_in', (req, res) => {
     if(req.session.status == 1){
         res.render('default', {
-            title: 'Login',
-            brief: 'You have loged in.'
+            title: 'Sign In',
+            brief: 'You have signed in.',
+            content: null
         })
     } else {
-        res.render('login', {});
+        res.render('sign_in', {});
+    }
+})
+
+router.post('/sign_up/action', (req, res) => {
+     db.query('SELECT * FROM users WHERE name = ?', [req.body.name], (result) => {
+        if(result[0] != null) {
+            res.render('default', {
+                title: 'Sign Up',
+                brief: 'Username conflict.',
+                content: 'Please try another username.'
+            });
+            return;
+        }
+        db.query('INSERT INTO users (name, password, content) VALUES (?, ?, ?)', [
+            req.body.name,
+            md5(req.body.password),
+            JSON.stringify({
+                score: 0,
+                quote: '',
+                imgurl: '',
+                bgurl: ''
+            })
+        ], (result) => {
+            console.log(typeof(result));
+            if(typeof(result) == 'object'){
+                res.render('default', {
+                    title: 'Sign Up',
+                    brief: 'Success',
+                    content: 'Now you can sign in with this account.'
+                });
+            } else {
+                res.render('default', {
+                    title: 'Sign Up',
+                    brief: 'Failed',
+                    content: 'Maybe something wrong. You can try is again.'
+                });
+            }
+        });
+    })
+})
+
+router.get('/sign_up', (req, res) => {
+    if(req.session.status == 1){
+        res.render('default', {
+            title: 'Sign Up',
+            brief: 'You have signed in.',
+            content: null
+        })
+    } else {
+        res.render('sign_up', {});
     }
 })
 
@@ -48,6 +98,11 @@ router.get('/:id', (req, res) => {
     if(req.params.id == 0){
         if(req.session.status == 1){
             req.params.id = req.session.ide;
+        } else {
+            res.render('default', {
+                title: 'Users',
+                brief: "Haven't signed in."
+            });
         }
     }
     db.query("SELECT * FROM users WHERE id = ?", [req.params.id], (result) => {
