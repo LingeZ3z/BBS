@@ -17,11 +17,16 @@ app.use(session({
     saveUninitialized: false
 }));
 
+const verify = require('./modules/verify');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const bbsRouter = require('./routes/bbs');
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+app.use('/bbs', verify.verifySignin);
+app.use('/bbs', bbsRouter);
 
 app.listen(3000, () => {
     console.log("Server Started.")

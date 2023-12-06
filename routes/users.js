@@ -101,8 +101,10 @@ router.get('/:id', (req, res) => {
         } else {
             res.render('default', {
                 title: 'Users',
-                brief: "Haven't signed in."
+                brief: "Haven't signed in.",
+                content: null
             });
+            return;
         }
     }
     db.query("SELECT * FROM users WHERE id = ?", [req.params.id], (result) => {
