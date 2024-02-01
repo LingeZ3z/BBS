@@ -61,7 +61,8 @@ router.post('/sign_up/action', (req, res) => {
                 score: 0,
                 quote: '',
                 imgurl: '',
-                bgurl: ''
+                bgurl: '',
+                descr: ''
             })
         ], (result) => {
             console.log(typeof(result));
@@ -94,6 +95,15 @@ router.get('/sign_up', (req, res) => {
     }
 })
 
+router.get('/sign_out', (req, res) => {
+    req.session.status = 0;
+    res.render('default', {
+        title: 'Users',
+        brief: "Success.",
+        content: null
+    })
+})
+
 router.get('/:id', (req, res) => {
     if(req.params.id == 0){
         if(req.session.status == 1){
@@ -108,13 +118,15 @@ router.get('/:id', (req, res) => {
         }
     }
     db.query("SELECT * FROM users WHERE id = ?", [req.params.id], (result) => {
-        if(result[0] != null)
-            res.render('default',{
-                title: 'Users',
-                brief: result[0].name,
-                content: result[0].content
+        if(result[0] != null){
+            console.log(result[0].content);
+            var content = JSON.parse(result[0].content);
+            res.render('users', {
+                name: result[0].name,
+                quote: content.quote,
+                descr: content.descr
             })
-        else res.render('default',{
+        } else res.render('default',{
             title: 'Users',
             brief: 'No Such Account',
             content: "We can't find any account."
