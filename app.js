@@ -25,7 +25,7 @@ const bbsRouter = require('./routes/bbs');
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-// app.use('/bbs', verify.verifySignin);
+app.use('/bbs', verify.verifySignin);
 app.use('/bbs', bbsRouter);
 
 app.listen(3000, () => {
