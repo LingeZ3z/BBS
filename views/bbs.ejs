@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>BBS</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>PostTime</th>
+                    <th>ReplyCount</th>
+                    <th>Author</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(var i = 0; i < post.length; i++) {%>
+                    <tr>
+                        <th><a href=""><%= post[i].title %></a></th>
+                        <th><%= post[i].post_time %></th>
+                        <th><%= post[i].reply_count %></th>
+                        <th><a href="users/<%= post[i].author %>"><%= post[i].author %></a></th>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </body>
+</html>

@@ -119,7 +119,6 @@ router.get('/:id', (req, res) => {
     }
     db.query("SELECT * FROM users WHERE id = ?", [req.params.id], (result) => {
         if(result[0] != null){
-            console.log(result[0].content);
             var content = JSON.parse(result[0].content);
             res.render('users', {
                 name: result[0].name,
